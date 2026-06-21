@@ -1,0 +1,25 @@
+
+
+{
+  "name": "Anton Maurette",
+  "short_name": "Anton Maurette",
+  "description": "Portfolio, write-ups, and research by Anton Maurette — student in Networks & Telecommunications (IUT Béthune) and apprentice at Orange DSCE.",
+  "icons": [
+    {
+      "src": "/antonm.github.io/assets/img/favicons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/antonm.github.io/assets/img/favicons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/antonm.github.io/index.html",
+  "theme_color": "#2a1e6b",
+  "background_color": "#ffffff",
+  "display": "fullscreen"
+}
+

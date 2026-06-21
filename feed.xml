@@ -1,0 +1,145 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://yzr0eg.github.io/antonm.github.io/</id>
+  <title>Anton Maurette</title>
+  <subtitle>Portfolio, write-ups, and research by Anton Maurette — student in Networks &amp; Telecommunications (IUT Béthune) and apprentice at Orange DSCE.</subtitle>
+  <updated>2026-06-11T22:10:56+02:00</updated>
+  <author>
+    <name>Anton Maurette</name>
+    <uri>https://yzr0eg.github.io/antonm.github.io/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="https://yzr0eg.github.io/antonm.github.io/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="fr"
+    href="https://yzr0eg.github.io/antonm.github.io/"/>
+  <generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator>
+  <rights> © 2026 Anton Maurette </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>AC25.02Cyber — Prendre en main des outils de test de pénétration réseau/système</title>
+    <link href="https://yzr0eg.github.io/antonm.github.io/posts/ac25-02/" rel="alternate" type="text/html" title="AC25.02Cyber — Prendre en main des outils de test de pénétration réseau/système" />
+    <published>2025-11-03T00:00:00+01:00</published>
+  
+    <updated>2025-11-03T00:00:00+01:00</updated>
+  
+    <id>https://yzr0eg.github.io/antonm.github.io/posts/ac25-02/</id>
+    <content type="text/html" src="https://yzr0eg.github.io/antonm.github.io/posts/ac25-02/" />
+    <author>
+      <name>Anton Maurette</name>
+    </author>
+
+  
+    
+    <category term="securiser" />
+    
+    <category term="surveiller" />
+    
+  
+
+  <summary>Deux labs (Linux + Windows AD) pour appliquer une démarche de pentest et documenter les preuves.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>AC25.01Cyber — Administrer des mécanismes de protection et de réduction de surface d’attaque</title>
+    <link href="https://yzr0eg.github.io/antonm.github.io/posts/ac25-01/" rel="alternate" type="text/html" title="AC25.01Cyber — Administrer des mécanismes de protection et de réduction de surface d’attaque" />
+    <published>2025-11-03T00:00:00+01:00</published>
+  
+    <updated>2025-11-03T00:00:00+01:00</updated>
+  
+    <id>https://yzr0eg.github.io/antonm.github.io/posts/ac25-01/</id>
+    <content type="text/html" src="https://yzr0eg.github.io/antonm.github.io/posts/ac25-01/" />
+    <author>
+      <name>Anton Maurette</name>
+    </author>
+
+  
+    
+    <category term="securiser" />
+    
+  
+
+  <summary>Lab Linux : réduction de surface d’attaque, filtrage et contrôle d’accès admin avec preuves.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>AC24.06Cyber — Comprendre des documents techniques en anglais</title>
+    <link href="https://yzr0eg.github.io/antonm.github.io/posts/ac24-06/" rel="alternate" type="text/html" title="AC24.06Cyber — Comprendre des documents techniques en anglais" />
+    <published>2025-11-03T00:00:00+01:00</published>
+  
+    <updated>2025-11-03T00:00:00+01:00</updated>
+  
+    <id>https://yzr0eg.github.io/antonm.github.io/posts/ac24-06/</id>
+    <content type="text/html" src="https://yzr0eg.github.io/antonm.github.io/posts/ac24-06/" />
+    <author>
+      <name>Anton Maurette</name>
+    </author>
+
+  
+    
+    <category term="securiser" />
+    
+  
+
+  <summary>Lecture et compréhension de documents techniques en anglais (RFC, docs éditeurs).</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>AC24.05Cyber — Connaître les différents types d’attaque</title>
+    <link href="https://yzr0eg.github.io/antonm.github.io/posts/ac24-05/" rel="alternate" type="text/html" title="AC24.05Cyber — Connaître les différents types d’attaque" />
+    <published>2025-11-03T00:00:00+01:00</published>
+  
+    <updated>2025-11-03T00:00:00+01:00</updated>
+  
+    <id>https://yzr0eg.github.io/antonm.github.io/posts/ac24-05/</id>
+    <content type="text/html" src="https://yzr0eg.github.io/antonm.github.io/posts/ac24-05/" />
+    <author>
+      <name>Anton Maurette</name>
+    </author>
+
+  
+    
+    <category term="securiser" />
+    
+  
+
+  <summary>Laboratoire d’intrusion Linux : reconnaissance, port-knocking, exploitation et élévation de privilèges.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>AC24.04Cyber — Choisir les outils cryptographiques adaptés</title>
+    <link href="https://yzr0eg.github.io/antonm.github.io/posts/ac24-04/" rel="alternate" type="text/html" title="AC24.04Cyber — Choisir les outils cryptographiques adaptés" />
+    <published>2025-11-03T00:00:00+01:00</published>
+  
+    <updated>2025-11-03T00:00:00+01:00</updated>
+  
+    <id>https://yzr0eg.github.io/antonm.github.io/posts/ac24-04/</id>
+    <content type="text/html" src="https://yzr0eg.github.io/antonm.github.io/posts/ac24-04/" />
+    <author>
+      <name>Anton Maurette</name>
+    </author>
+
+  
+    
+    <category term="securiser" />
+    
+  
+
+  <summary>Choix des outils crypto : SSH, TLS, certificats et hash selon le besoin.</summary>
+
+  </entry>
+
+</feed>
+
+

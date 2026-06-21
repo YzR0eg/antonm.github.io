@@ -1,0 +1,220 @@
+[
+  
+  {
+    "title": "AC25.02Cyber — Prendre en main des outils de test de pénétration réseau/système",
+    "url": "/antonm.github.io/posts/ac25-02/",
+    "categories": "securiser, surveiller",
+    "tags": "cyber, pentest, reconnaissance, scan, kerberos, active-directory",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Utiliser des outils de test de pénétration sur un périmètre autorisé, cartographier l’existant et produire une synthèse propre des risques observés.  Cadre autorisé Les manipulations présentées viennent de labs isolés et prévus pour l’apprentissage. Je les traite comme des exercices de diagnostic : l’objectif est de comprendre ce que les outils montrent, ce qu’ils ne prouvent pas, et quelles mesures de protection on peut en déduire.  Compétences visées    Définir un périmètre et une méthode de test.   Réaliser une reconnaissance et un scan propre.   Interpréter les résultats et formuler des constats.   Contexte (Labs)    Lab Linux : cible 10.16.20.187 sur VLAN de test.   Lab Windows AD : domaine k1ttyVLAN800.c4t avec service HTTP protégé par Kerberos.   Outils utilisés    Linux : nmap, nc -zv   Windows AD : runas /netonly, klist, Rubeus en lab, curl   Méthode appliquée    Périmètre défini (VLAN de test).   Découverte des hôtes actifs puis scan des services.   Validation des ports ouverts et inventaire.   Côté Windows, vérification du contexte Kerberos et test d’accès HTTP protégé.   Synthèse des constats et pistes d’amélioration.   Preuves (extraits des notes) IP= 10.16.20.187 objectif du lab : passer d'une reconnaissance réseau à un accès documenté, puis expliquer les constats           Ces deux captures servent à comparer découverte et validation. Le scan donne une hypothèse sur les services exposés ; le test avec nc permet de confirmer le comportement d’un port sans s’appuyer uniquement sur une sortie brute.                 La partie Windows m’a surtout obligé à distinguer le contexte local du contexte domaine. runas /netonly, klist et l’outil d’analyse Kerberos utilisé en lab ne sont pas seulement des commandes à exécuter : ils servent à vérifier avec quelle identité la machine tente réellement d’accéder au service. Je présente cette partie de manière sobre parce que le point important pour le portfolio est l’interprétation technique, pas la mise en scène offensive.  Ce que j’ai appris    Un scan propre et documenté vaut mieux qu’un scan agressif.   Les sorties brutes et les captures donnent un rapport crédible.   Une preuve n’a de valeur que si elle répond à une question précise : service exposé, identité utilisée, accès validé ou risque associé.   Difficultés rencontrées    Bien séparer le contexte local et le contexte domaine (sessions runas /netonly).   Comprendre ce que montrent les tickets Kerberos pour justifier l’accès.   Ce que je ferais autrement Je transformerais mes notes en mini tableau d’audit : constat, preuve, impact, limite et piste de remédiation. Cela rendrait la trace plus proche d’un livrable professionnel qu’un simple déroulé de lab."
+  },
+  
+  {
+    "title": "AC25.01Cyber — Administrer des mécanismes de protection et de réduction de surface d’attaque",
+    "url": "/antonm.github.io/posts/ac25-01/",
+    "categories": "securiser",
+    "tags": "cyber, durcissement, port-knocking, ssh, nftables, logs",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Mettre en place des protections simples mais efficaces sur un lab cyber pour étudiants : réduire l’exposition des services sensibles, contrôler les accès d’admin et garder des preuves des tests réalisés.  Compétences visées    Mettre en œuvre une stratégie de protection (prévention + détection).   Centraliser les journaux et les exploiter.   Contrôler les accès d’administration.   Contexte (SAE 3.03) Lab Linux avec une cible dédiée, accès admin limité et SSH déplacé sur un port non standard.  Mise en œuvre 1) Réduction de la surface d’attaque    SSH déplacé sur un port dédié (2222).   Port-knocking pour éviter l’exposition directe.   2) Accès admin contrôlé    Séquence de ports (7000/8000/9000) pour ouvrir l’accès.   Tests OK/KO pour valider l’ouverture et le refus.   Preuves (extraits des notes) sudo nft add rule inet firewall input tcp dport 7000 add @knock1 { ip saddr } drop sudo nft add rule inet firewall input tcp dport 8000 ip saddr @knock1 add @knock2 { ip saddr } drop sudo nft add rule inet firewall input tcp dport 9000 ip saddr @knock2 add @knock3 { ip saddr } drop sudo nft add rule inet firewall input tcp dport 2222 ip saddr @knock3 accept           Difficultés rencontrées    Faire fonctionner le port‑knocking sans bloquer les accès légitimes.   Éviter les faux positifs lors des tests d’ouverture/fermeture.   Ce que j’ai appris    Un service “caché” mais contrôlé est plus robuste qu’un service exposé.   Les tests OK/KO et les captures rendent la démonstration claire."
+  },
+  
+  {
+    "title": "AC24.06Cyber — Comprendre des documents techniques en anglais",
+    "url": "/antonm.github.io/posts/ac24-06/",
+    "categories": "securiser",
+    "tags": "anglais, documentation, rfc, veille",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Être capable de lire un document technique en anglais (RFC, documentation éditeur) et d’en extraire l’essentiel.  Compétences visées    Repérer les parties importantes d’un document.   Extraire les informations utiles pour la configuration.   Résumer en français pour un rapport technique.   Méthode de lecture Je ne lis pas toute la documentation de manière linéaire. Je pars d’un blocage concret du lab, puis je cherche :    la définition du terme technique ;   la syntaxe ou l’option utile ;   les limites ou avertissements donnés par la documentation ;   un exemple que je peux adapter sans le recopier mécaniquement.   Cette méthode m’évite de transformer la veille en simple accumulation de liens.  Preuves (extraits des notes) Documents utilisés pour les labs (extraits) : https://www.hackthebox.com/files/cheatsheet-network-enumeration-with-nmap.pdf https://devhints.io/curl https://sushant747.gitbooks.io/total-oscp-guide/content/port_knocking.html https://gtfobins.github.io/ https://gchq.github.io/CyberChef/   Résumé court (exemple) :    La cheatsheet Nmap m’a permis de relire les états open/closed/filtered.   La doc port‑knocking m’a aidé à comprendre la logique des ports 7000/8000/9000.   GTFObins m’a servi à vérifier des pistes d’escalade de privilèges.   Exemples de reformulation | Terme ou notion | Ce que j’en retiens | Utilisation dans le lab | | — | — | — | | filtered | Le scan ne permet pas de conclure directement que le service est absent. | Je vérifie l’hypothèse d’un filtrage avant de conclure. | | port knocking | L’accès à un service peut dépendre d’une séquence préalable. | Je teste la séquence avant de considérer SSH comme fermé. | | SUID / sudo -l | Les droits locaux doivent être interprétés avec prudence. | Je relie chaque piste à une preuve et à une limite. |  Exemple d’exploitation Sur un scan réseau, la différence entre closed et filtered change l’interprétation : un port closed indique qu’une machine répond, alors qu’un port filtered suggère qu’un filtrage empêche d’obtenir une réponse claire. Cette nuance m’a servi à éviter une conclusion trop rapide pendant la phase de reconnaissance.  Ce que j’ai appris Lire la doc en anglais est incontournable en cyber : les détails importants sont souvent là. Je dois encore mieux capitaliser ces lectures sous forme de fiches courtes, avec le contexte d’utilisation et pas seulement l’URL."
+  },
+  
+  {
+    "title": "AC24.05Cyber — Connaître les différents types d’attaque",
+    "url": "/antonm.github.io/posts/ac24-05/",
+    "categories": "securiser",
+    "tags": "cybersecurity, pentest, linux, port-knocking, privesc, attaque",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Comprendre les principales étapes d’une attaque : reconnaissance, accès initial,     puis élévation de privilèges. Le lab est encadré et isolé.         Compétences visées        Identifier les vecteurs d’attaque courants.     Analyser un service exposé et ses faiblesses.     Appliquer une méthodologie claire (énumération → exploitation → privesc).         Présentation de l’environnement        La machine cible est isolée dans un VLAN de test. Le service SSH réel est masqué     par un mécanisme de port-knocking.         Phase 1 — Reconnaissance    ping 10.16.20.187 nmap 10.16.20.187           Le scan montre un service HTTP exposé (80/tcp) et le reste filtré,     signe d’un filtrage réseau actif.         Phase 2 — Port-knocking    for p in 7000 8000 9000; do hping3 -S -c 1 -p $p 10.16.20.187; done nc -zv 10.16.20.187 2222         Phase 3 — Élévation de privilèges        Recherche de permissions anormales.     Analyse des binaires SUID.     Vérification de la configuration sudoers.         Phase 4 — Ingénierie sociale (exemple pédagogique)        Comprendre le risque d’un faux portail de connexion hébergé en lab     et l’impact d’une collecte d’identifiants.         Preuves (extraits des notes)                                     Ce que j’ai appris        Une attaque réussie suit souvent les mêmes étapes. Les preuves et la méthode     font la différence entre “tester” et “comprendre”."
+  },
+  
+  {
+    "title": "AC24.04Cyber — Choisir les outils cryptographiques adaptés",
+    "url": "/antonm.github.io/posts/ac24-04/",
+    "categories": "securiser",
+    "tags": "crypto, tls, ssh, certificats, hash",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Choisir un mécanisme crypto adapté à un service réel. Ici, sécuriser un service SIP en mettant en place un transport TLS et des certificats.  Compétences visées    Activer un transport TLS sur un service réseau.   Manipuler des certificats/clé privée côté serveur.   Comprendre l’impact du chiffrement sur l’authentification.   Preuves (extraits des notes) [transport-tls] type=transport protocol=tls bind=0.0.0.0:5061 cert_file=/etc/asterisk/keys/asterisk.crt priv_key_file=/etc/asterisk/keys/asterisk.key method=tlsv1_2        Ce que j’ai appris Le bon choix crypto dépend du service : ici, TLS protège le SIP et évite les échanges en clair sur le réseau."
+  },
+  
+  {
+    "title": "AC24.03Cyber — Sécuriser les services",
+    "url": "/antonm.github.io/posts/ac24-03/",
+    "categories": "securiser, surveiller",
+    "tags": "windows, active-directory, kerberos, services, durcissement",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Sécuriser un service en environnement AD : contrôler les accès, surveiller les logs     et comprendre l’impact d’une compromission.         Compétences visées        Identifier les points sensibles d’un service (authentification, droits).     Mettre en place des contrôles d’accès et de journalisation.     Proposer des remédiations simples (durcissement, rotation secrets).         Contexte        Lab Windows Server avec Active Directory et Kerberos.     Le scénario met en évidence la nécessité de protéger les comptes et les services exposés.         Méthode        Vérifier les droits et les groupes d’accès.     Activer la journalisation sur les services critiques.     Tester l’accès avec un compte autorisé / non autorisé.         Preuves (extraits des notes)                      Ce que j’ai appris        La sécurité d’un service dépend autant de la configuration que du suivi des logs.     Sans contrôle d’accès, tout le reste est fragile."
+  },
+  
+  {
+    "title": "AC24.02Cyber — Mettre en œuvre les outils fondamentaux de sécurisation",
+    "url": "/antonm.github.io/posts/ac24-02/",
+    "categories": "securiser, surveiller",
+    "tags": "pare-feu, acl, segmentation, logs, ids",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Mettre en place les outils fondamentaux pour sécuriser une infrastructure réseau : filtrage, segmentation et accès administrateur contrôlé.  Compétences visées    Filtrer les flux (ACL, pare-feu).   Segmenter un réseau (VLAN, zones).   Activer et exploiter la journalisation.   Mise en œuvre (SAE réseaux)    Création d’un réseau de management dédié (br-mgmt) pour isoler l’administration.   Configuration d’une interface FortiGate avec accès admin contrôlé.   Accès GUI via tunnel SSH vers le réseau de management.   Preuves (extraits des notes) ip link add br-mgmt type bridge ip addr add 172.31.255.1/24 dev br-mgmt ip link set br-mgmt up  config system interface edit port1 set ip 172.31.255.2 255.255.255.0 set allowaccess ping http https ssh end  ssh -N -p 2222 -L 8080:172.31.255.2:80 root@82.165.164.206        Ce que j’ai appris    Sans segmentation ni contrôle d’accès, l’admin devient un point faible.   Un simple tunnel SSH bien configuré peut sécuriser l’accès à l’interface d’admin."
+  },
+  
+  {
+    "title": "AC24.01Cyber — Bonnes pratiques et recommandations de cybersécurité",
+    "url": "/antonm.github.io/posts/ac24-01/",
+    "categories": "securiser",
+    "tags": "bonnes-pratiques, durcissement, mots-de-passe, sauvegardes, mfa",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Appliquer des bonnes pratiques simples autour de l’identité et des accès dans un environnement Active Directory (lab pédagogique).  Compétences visées    Configurer correctement la machine cliente pour le domaine (DNS + join).   Séparer le contexte local et le contexte domaine lors des accès admin.   Vérifier l’authentification Kerberos (tickets en cache).   Mise en œuvre    Pointage DNS vers le contrôleur de domaine, puis jonction au domaine.   Ouverture d’une session réseau dédiée avec runas /netonly.   Vérification des tickets Kerberos avec klist.   Preuves (extraits des notes) Set-DnsClientServerAddress -InterfaceAlias \"Ethernet\" -ServerAddresses 10.16.20.215 Add-Computer -DomainName \"k1ttyVLAN800.c4t\" -Credential \"k1ttyVLAN800\\\\joindomain\" -Restart           Ce que j’ai appris    La base, c’est l’identité : si la jonction domaine/DNS est bancale, tout le reste l’est.   Séparer le contexte local et le contexte domaine évite des erreurs d’accès et de diagnostic."
+  },
+  
+  {
+    "title": "AC23.05 — Accéder à un ensemble de données depuis une application et/ou un site web",
+    "url": "/antonm.github.io/posts/ac23-05/",
+    "categories": "programmer",
+    "tags": "api, data, web, json, requetes",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Accéder à des données depuis une application web et afficher des résultats propres à partir d’un corpus de documents (SAE 3.02).  Compétences visées    Consommer des données (API/DB).   Afficher et filtrer les résultats côté interface.   Gérer les erreurs et cas vides.   Mise en œuvre Le serveur recherche dans un dossier data/ et renvoie la position des résultats (ligne, page ou cellule) pour faciliter la lecture.  Types traités :    .txt / .html   .pdf   .xlsx / .xls / .ods   Extrait de code (gestion des modes de recherche) def _compile_patterns(query, mode, ignore_case, whole_word, regex):     flags = re.IGNORECASE if ignore_case else 0     if regex:         base_patterns = [query]     else:         base_patterns = [query] if mode == \"phrase\" else query.split()         base_patterns = [re.escape(p) for p in base_patterns if p.strip()]     return [re.compile(p if not whole_word else rf\"\\\\b{p}\\\\b\", flags) for p in base_patterns]   Preuves et captures       Ce que j’ai appris    Le format du résultat (ligne/page/cellule) rend l’outil réellement utilisable.   Les cas “0 résultat” doivent être gérés proprement."
+  },
+  
+  {
+    "title": "AC23.04 — Installer, administrer un système de gestion de données",
+    "url": "/antonm.github.io/posts/ac23-04/",
+    "categories": "programmer",
+    "tags": "database, postgresql, sql, administration",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Installer un site web avec une base SQL dans le cadre d’une SAE (S2 – SAE pépinière, projet “portfolio‑flask”) : configurer la base, créer le schéma et vérifier l’accès depuis l’application.  Compétences visées    Configurer une base SQL pour une application web (Flask).   Créer les tables et vérifier l’accès via ORM.   Alimenter la base et contrôler les données.   Mise en œuvre (SAE pépinière – S2)    Configuration d’une base PostgreSQL via SQLALCHEMY_DATABASE_URI.   Création des tables via un script create_db.py.   Alimentation par script (ajout de compétences/semestres).   En local, tests avec SQLite pour valider rapidement.   Preuves (extraits du code) # app/config.py class Config:     SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@db:5432/portfolio'  # app/create_db.py from app import app, db with app.app_context():     db.create_all()     print(\"Base de données créée avec succès !\")  # app/models.py class User(db.Model):     id = db.Column(db.Integer, primary_key=True)     username = db.Column(db.String(20), unique=True, nullable=False)     email = db.Column(db.String(120), unique=True, nullable=False)              Ce que j’ai appris    La configuration DB doit être claire (URI, schéma, migrations).   Les scripts de création/peuplement évitent les erreurs manuelles."
+  },
+  
+  {
+    "title": "AC23.03 — Utiliser un protocole réseau pour programmer une application client/serveur",
+    "url": "/antonm.github.io/posts/ac23-03/",
+    "categories": "programmer",
+    "tags": "client-serveur, sockets, tcp, udp, protocoles",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Développer une application client/serveur TCP pour comprendre les échanges réseau (projet utilisé dans la SAE 3.02 Search Server).  Compétences visées    Mettre en place un serveur qui écoute et un client qui se connecte.   Gérer un échange de messages simple.   Tester la connexion et gérer les erreurs basiques.   Méthode    Serveur TCP : socket en écoute + thread par client.   Client TCP : connexion, envoi de requête, lecture de réponse.   Tests de bout en bout (connexion, message, réponse).   Preuves (extraits du code) def start_server() -&gt; None:     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)         server_socket.bind((SERVER_HOST, SERVER_PORT))         server_socket.listen(SOCKET_BACKLOG)         while True:             connection, address = server_socket.accept()             threading.Thread(target=handle_client, args=(connection, address), daemon=True).start()  def start_client() -&gt; None:     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:         client_socket.connect((SERVER_HOST, SERVER_PORT))         welcome = receive_message(client_socket)         query = input(\"Search query (q to quit): \").strip()         send_message(client_socket, query)         response = receive_message(client_socket)   Ce que j’ai appris    La logique client/serveur est simple, mais la gestion des erreurs est essentielle.   Les tests de connexion sont indispensables avant d’ajouter des fonctionnalités."
+  },
+  
+  {
+    "title": "AC23.02 — Développer une application à partir d’un cahier des charges",
+    "url": "/antonm.github.io/posts/ac23-02/",
+    "categories": "programmer",
+    "tags": "web, application, cahier-des-charges, ui, api",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Développer une application complète (SAE 3.02 “Search Server”) en respectant un cahier des charges : communication client/serveur, interface web et résultats fiables.  Compétences visées    Traduire un besoin en fonctionnalités concrètes.   Organiser le développement (maquettes, tâches, tests).   Mettre en place un front + un back simples mais propres.   Contexte du projet (SAE 3.02) Projet “Search Server” : un service local de recherche de documents avec :    un serveur TCP multi‑thread,   un client TCP interactif,   une interface web Flask.   Le cahier des charges demandait une recherche propre et des résultats lisibles.  Fonctions clés :    mode phrase et mode termes (AND/OR),   recherche insensible à la casse,   recherche sur mot entier,   support regex.   Outils utilisés    Python 3 (sockets TCP)   Flask (interface web)   HTML/CSS (UI simple)   Git (versioning)   Méthodologie    Découpage en trois briques : serveur TCP, client TCP, interface web.   Tests unitaires simples avec des fichiers dans data/.   Itérations UI pour rendre l’affichage clair.   Extrait de code (sécurisation des accès fichiers) def _safe_data_file(filename: str) -&gt; str:     candidate = os.path.abspath(os.path.join(DATA_PATH, filename))     data_abs = os.path.abspath(DATA_PATH)     if not candidate.startswith(data_abs + os.sep):         abort(403)     if not os.path.isfile(candidate):         abort(404)     return candidate   Résultat L’application répond aux exigences : recherche fonctionnelle en local, interface claire, et communication serveur fiable.  Preuves et captures (extraits du projet) python3 -m server.server python3 -m client.client python3 -m web.app           Ce que j’ai appris    La communication client/serveur doit être testée tôt pour éviter les blocages.   Une interface simple suffit si les résultats sont clairs."
+  },
+  
+  {
+    "title": "AC23.01 — Automatiser l’administration système avec des scripts",
+    "url": "/antonm.github.io/posts/ac23-01/",
+    "categories": "programmer",
+    "tags": "automatisation, scripts, powershell, bash, batch, windows-server, gpo, ad, adminsys",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Automatiser les tâches répétitives d’administration pour gagner du temps et éviter les erreurs.     J’ai écrit des scripts simples (Batch / PowerShell) puis vérifié que tout était reproductible.         Compétences visées        Identifier une tâche répétitive et la formaliser.     Écrire un script clair et maintenable.     Valider le résultat avec des commandes de contrôle.         Contexte        En environnement Windows Server, la création de comptes, les partages et les quotas sont longs à faire à la main.     L’automatisation permet d’avoir une procédure standardisée et vérifiable.         Automatisation 1 — Script de session   Montage automatique d’un lecteur réseau au logon.    @echo off set SHARE=\\\\SRV-SERVICES\\partage set DRIVE=Z:  net use %DRIVE% /delete /y &gt;nul 2&gt;&amp;1 net use %DRIVE% %SHARE% /persistent:yes  if not exist \"%USERPROFILE%\\Documents\\Travail\" (   mkdir \"%USERPROFILE%\\Documents\\Travail\" )         Automatisation 2 — Création d’utilisateurs en lot   CSV + PowerShell pour créer les comptes sans erreur.    Import-Module ActiveDirectory $Users = Import-Csv .\\users.csv  foreach ($u in $Users) {   if (Get-ADUser -Filter \"SamAccountName -eq '$($u.SamAccountName)'\" -ErrorAction SilentlyContinue) {     Write-Host \"[SKIP] $($u.SamAccountName) existe déjà\"     continue   }    New-ADUser -Name \"$($u.Prenom) $($u.Nom)\" \\     -SamAccountName $u.SamAccountName \\     -AccountPassword (ConvertTo-SecureString $u.Password -AsPlainText -Force) \\     -Enabled $true }         Automatisation 3 — Quotas disque   Exemple de configuration d’un quota avec seuil d’alerte.      Preuves et captures                      Ce que j’ai appris        Un script utile est simple, relançable et vérifiable.     Le plus important reste les contrôles après exécution."
+  },
+  
+  {
+    "title": "AC22.05 — Capacité à questionner un cahier des charges RT",
+    "url": "/antonm.github.io/posts/ac22-05/",
+    "categories": "connecter",
+    "tags": "cahier-des-charges, exigences, besoins, rt, projet, sae",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Apprendre à lire un cahier des charges et à poser les bonnes questions avant de concevoir.     Le but est d’éviter les zones floues et d’obtenir des exigences mesurables.         Compétences visées        Identifier le besoin et les contraintes.     Traduire un besoin métier en exigences techniques.     Proposer un schéma d’architecture cohérent.         Méthode appliquée        Questions sur l’existant, le budget, les délais, la sécurité.     Liste des services attendus et des niveaux de disponibilité.     Première maquette réseau pour valider le périmètre.         Preuves et captures                      Ce que j’ai appris        Un CDC mal questionné donne un projet fragile. Poser les bonnes questions dès le départ     fait gagner du temps sur toute la mise en œuvre."
+  },
+  
+  {
+    "title": "AC22.04 — Déployer des réseaux d’accès des opérateurs (FTTH / GPON)",
+    "url": "/antonm.github.io/posts/ac22-04/",
+    "categories": "connecter",
+    "tags": "ftth, gpon, fibre, olt, ont, pon, otdr, opérateur, streaming, web",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Comprendre le principe d’un accès FTTH/GPON et valider une mise en service simple     jusqu’aux services (IP, accès client). L’objectif est d’identifier les éléments clés     et la logique de bout en bout.         Compétences visées        Identifier les éléments FTTH/GPON (OLT, ONT, splitters, PTO).     Comprendre la chaîne de bout en bout (cœur opérateur → client).     Valider le service côté client (IP, ping, accès).         Preuves et captures                      Ce que j’ai appris        La logique FTTH/GPON repose sur une architecture très structurée.     Même sur une maquette simple, il faut valider chaque étape pour éviter une panne “silencieuse”."
+  },
+  
+  {
+    "title": "AC22.03 — Mettre en place une connexion multi-site via un réseau opérateur",
+    "url": "/antonm.github.io/posts/ac22-03/",
+    "categories": "connecter",
+    "tags": "multi-site, wan, operateur, vpn, ipsec, routage, securite, gns3",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Relier un siège et une agence via un réseau opérateur, puis valider que les services     circulent correctement entre les sites.         Compétences visées        Définir une architecture multi-site.     Mettre en place les routes et la sécurité inter-sites.     Vérifier la continuité de service.         Contexte de la maquette        La situation étudiée correspond à un cas simple d’entreprise : un site principal et une agence     doivent communiquer à travers un réseau opérateur simulé. J’ai donc dû raisonner à la fois sur     l’adressage local de chaque site, les routes de transit et les flux réellement autorisés entre les deux côtés.         Méthode et validations        Définition d’un plan d’adressage pour éviter les chevauchements entre sites.     Mise en place des routes nécessaires dans GNS3.     Vérification progressive : passerelle locale, lien opérateur, puis service distant.     Contrôle de cohérence entre le schéma et la configuration réelle.           La validation progressive m’a évité de mélanger plusieurs causes possibles. Quand un test échoue,     je peux vérifier si le problème vient du LAN, du transit opérateur, du routage ou d’un filtrage.         Flux validés        Les flux détaillés dans ma présentation ont servi de périmètre de test.     Sur cette page, je garde surtout la méthode : pour chaque flux, j’ai vérifié la source,     la destination, le service attendu et le résultat obtenu. Cette logique permet d’éviter     une validation trop vague basée uniquement sur un ping général.         Preuves et captures                        Le plan sert à vérifier que l’architecture est compréhensible avant la configuration.     La capture GNS3 montre ensuite la traduction concrète de ce plan en équipements et liens.     L’intérêt de garder les deux traces est de comparer l’intention de départ avec la maquette réellement testée.         Ce que j’ai appris        La cohérence d’adressage et des routes est la base.     Sans une documentation claire, on se perd vite en multi-site.           Si je refaisais cette activité, je commencerais par une matrice de flux :     qui doit joindre quoi, sur quel service, et avec quel niveau de restriction.     Ce serait plus solide qu’une validation uniquement basée sur des tests de connectivité."
+  },
+  
+  {
+    "title": "AC22.02 — Mettre en place un accès distant sécurisé",
+    "url": "/antonm.github.io/posts/ac22-02/",
+    "categories": "connecter",
+    "tags": "vpn, ipsec, ssh, acces-distant, securite, reseau, fortigate",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Mettre en place un accès distant sécurisé entre deux sites et valider l’accès admin.     J’ai configuré un tunnel VPN puis testé l’accès aux services internes.         Compétences visées        Identifier les risques d’un accès distant non protégé.     Configurer un tunnel sécurisé (IPsec).     Valider la connectivité et les routes.         Méthode        Adressage clair des deux sites.     Paramétrage du tunnel VPN (phase 1 / phase 2).     Tests de bout en bout (ping, SSH).         Preuves et captures                      Ce que j’ai appris        Un VPN qui “monte” n’est pas forcément un VPN qui fonctionne :     les routes et les ACL font toute la différence."
+  },
+  
+  {
+    "title": "AC22.01 — Déployer et caractériser des systèmes de transmissions complexes",
+    "url": "/antonm.github.io/posts/ac22-01/",
+    "categories": "connecter",
+    "tags": "transmission, hf, streaming, gnuradio, sdr",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Mettre en place une chaîne de transmission HF complète et analyser le signal transmis.     J’ai utilisé une SDR et GNU Radio pour moduler un flux et vérifier la réception.         Compétences visées        Construire une chaîne de transmission numérique de bout en bout.     Choisir une modulation et régler les paramètres (débit, bande passante).     Caractériser un signal (spectre, constellations).         Chaîne de transmission        Source audio/vidéo.     Encodage et modulation (GNU Radio).     Émission via SDR.     Réception et démodulation.         Outils utilisés        GNU Radio.     SDR (type Pluto / HackRF selon dispo).     Outils d’analyse spectrale.         Preuves et captures                      Ce que j’ai appris        Les réglages de modulation ont un impact direct sur la qualité de réception.     Le diagnostic via spectre et constellation m’a aidé à comprendre les erreurs."
+  },
+  
+  {
+    "title": "AC21.06 — Travailler en équipe pour développer ses compétences professionnelles",
+    "url": "/antonm.github.io/posts/ac21-06/",
+    "categories": "administrer",
+    "tags": "projets, collaboration, equipe, sae, pepiniere, telephonie",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Apprendre à travailler en équipe sur un projet réseau : se répartir les tâches,     documenter proprement et livrer un résultat commun.         Compétences visées        Organiser le travail (rôles, planning, objectifs).     Coordonner la configuration et les tests.     Produire un livrable clair et partagé.         Contexte        Sur les SAE et projets de groupe, on a dû mutualiser les configs, tester à plusieurs     et rendre un dossier final cohérent (schémas, preuves, explications).         Méthode        Découpage des tâches (adressage, routage, services, tests).     Points réguliers pour éviter les incohérences.     Centralisation des configs et captures.         Preuves et captures                      Ce que j’ai appris        Le plus important est la coordination : une configuration isolée ne suffit pas.     Travailler en équipe m’a appris à documenter et à rendre mes tests reproductibles."
+  },
+  
+  {
+    "title": "AC21.05 — Identifier les réseaux opérateurs et l’architecture d’Internet",
+    "url": "/antonm.github.io/posts/ac21-05/",
+    "categories": "administrer",
+    "tags": "internet, opérateurs, mpls, bgp, mpbgp, vpn, asn, peering",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Comprendre comment Internet est organisé (AS, peering, transit) et comment les opérateurs     transportent les flux via BGP et MPLS. L’objectif est d’avoir une vision claire du “backbone”.         Compétences visées        Identifier les rôles d’un opérateur (FAI, transit, peering).     Comprendre le principe d’un AS et du routage inter-domaine.     Relier la théorie aux services réels (VPN, L3, L2).         Contexte        On s’est appuyé sur des schémas d’opérateurs et des scénarios simples pour comprendre     comment un réseau d’entreprise s’appuie sur un opérateur pour relier ses sites.         Preuves et captures                      Ce que j’ai appris        Les notions d’AS et de peering expliquent pourquoi “tout Internet” ne se route pas en OSPF.     J’ai aussi compris la logique des offres opérateurs (MPLS, VPN, liens dédiés)."
+  },
+  
+  {
+    "title": "AC21.04 — Déployer des services réseaux avancés",
+    "url": "/antonm.github.io/posts/ac21-04/",
+    "categories": "administrer",
+    "tags": "vpn, nat, load-balancer, services",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif Mettre en place des services réseau avancés utilisés en entreprise et vérifier qu’ils fonctionnent. J’ai surtout travaillé le VPN, le NAT/PAT et un principe de répartition de charge.  Services étudiés  1. VPN — Connexions sécurisées entre sites Le VPN permet de relier deux sites sur Internet en chiffrant les échanges. J’ai validé la connectivité avec des pings inter-sites et la stabilité du tunnel. Le point important n’était pas seulement de voir le tunnel actif, mais de vérifier que les flux utiles passaient vraiment entre les deux réseaux.  2. NAT/PAT — Traduction d’adresses Mise en œuvre d’un NAT pour permettre la sortie Internet d’un réseau privé. J’ai vérifié la traduction et le comportement des flux sortants. Cette étape m’a obligé à distinguer l’adresse vue côté LAN, l’adresse traduite côté WAN et le sens de circulation du trafic.  3. Load Balancing — Répartition de charge Principe de base : répartir les requêtes sur plusieurs serveurs pour éviter la surcharge. Je l’ai surtout travaillé comme principe d’architecture : ce service n’a de valeur que si les serveurs derrière répondent de manière cohérente.  Outils utilisés    Équipements Cisco / simulateur.   Commandes de vérification (show, debug ciblé).   Tests ping et accès aux services.   Vérifications réalisées Pour éviter de conclure trop vite, j’ai séparé les contrôles :    connectivité IP entre les équipements ;   présence des routes nécessaires ;   traduction d’adresse observée côté NAT/PAT ;   accès réel au service attendu, pas seulement un ping réussi.   Cette séparation m’a aidé à comprendre qu’un service peut être partiellement fonctionnel : par exemple un tunnel VPN peut être établi, mais inutilisable si une ACL ou une route bloque le trafic applicatif.  Preuves et captures             Ces captures servent ici de trace de synthèse : elles montrent les trois briques que j’ai étudiées et le rôle de chacune dans une architecture. Je présente donc cette trace comme une synthèse de méthode plutôt que comme un rapport de configuration complet. L’objectif est de montrer les points de contrôle que je retiens pour valider ce type de service.  Difficultés rencontrées Le plus compliqué a été la cohérence des routes et des ACL autour du VPN. Un mauvais paramètre et le tunnel monte mais rien ne passe.  Ce que j’ai appris    Un service réseau se valide uniquement avec des tests.   Le NAT et le VPN se complètent mais ne se confondent pas.   La documentation constructeur est indispensable pour les options avancées."
+  },
+  
+  {
+    "title": "AC21.03 — Déployer des postes clients et des solutions virtualisées adaptées à une situation donnée",
+    "url": "/antonm.github.io/posts/ac21-03/",
+    "categories": "administrer",
+    "tags": "virtualisation, postes-clients, windows-server, docker, dns",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Mettre en place des postes clients et des services virtualisés adaptés au besoin.     J’ai alterné entre VM (hyperviseur type 2) et conteneurs, en fonction du service demandé.         Compétences visées        Installer et configurer des postes clients.     Déployer des services de base (DNS, DHCP, AD DS) sur Windows Server.     Choisir la bonne solution de virtualisation (VM ou conteneur).         Contexte        Le scénario est celui d’une petite infra : un serveur (services), deux postes clients,     et des tests de résolution/attribution d’IP. L’objectif est d’avoir un environnement stable et reproductible.         Mise en œuvre        Création des VM (clients/serveur) et paramétrage réseau.     Installation des rôles Windows Server (AD, DNS, DHCP).     Tests de résolution DNS et de baux DHCP.     Déploiement d’un service en conteneur Docker pour comparer la rapidité.         Preuves et captures                      Difficultés rencontrées        L’ordre d’installation des rôles et la configuration DNS m’ont demandé plusieurs vérifications     pour éviter les incohérences entre clients et serveur.         Ce que j’ai appris        La virtualisation simplifie énormément les tests, mais il faut rester rigoureux sur le réseau     (vSwitch, DNS, routes). Docker est très rapide pour un service isolé."
+  },
+  
+  {
+    "title": "AC21.02 — Configurer et expliquer une politique simple de QoS et les fonctions de base de la sécurité d'un réseau",
+    "url": "/antonm.github.io/posts/ac21-02/",
+    "categories": "administrer",
+    "tags": "QoS, acl, Sécurité, Cisco, Réseau",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Comprendre comment on priorise un trafic sensible (voix/visioconf) et comment on filtre     un accès avec des ACL simples. J’ai appliqué des règles de QoS et de filtrage, puis vérifié l’impact.         Compétences visées        Identifier un trafic critique et définir une classe de service.     Configurer une QoS simple (classification + priorité).     Mettre en place des ACL pour autoriser ou bloquer des flux.     Valider le fonctionnement par des tests.         Contexte        Le scénario simule un petit réseau d’entreprise : trafic web, trafic voix et accès admin.     Le but est d’éviter que les transferts lourds dégradent la qualité d’un appel.         Mise en œuvre        Classification du trafic (ports/DSCP).     Application d’une priorité sur la file VoIP.     ACL d’accès pour limiter l’administration à un réseau précis.         Vérifications        J’ai contrôlé l’état des classes et observé les compteurs pour vérifier que la QoS était bien appliquée,     puis j’ai testé l’ACL avec un flux autorisé et un flux refusé.         Preuves et captures                      Difficultés rencontrées        Le plus délicat a été de choisir les bons ports et de vérifier que la classe QoS     captait bien le trafic attendu. Un mauvais match = aucun effet.         Ce que j’ai appris        Une QoS simple peut déjà améliorer beaucoup la qualité de service si on classe correctement.     Les ACL restent indispensables pour réduire la surface d’administration."
+  },
+  
+  {
+    "title": "AC21.01 — Assurer la continuité de service par redondance de passerelle",
+    "url": "/antonm.github.io/posts/ac21-01/",
+    "categories": "administrer",
+    "tags": "HSRP, VRRP, GLBP, routage, Cisco",
+    "date": "2025-11-03 00:00:00 +0100",
+    "content": "Objectif        Sur ce TP, j’ai mis en place une redondance de passerelle sur un réseau Cisco.     L’idée était de configurer HSRP, VRRP et GLBP, puis de vérifier la bascule quand un routeur tombe.         Compétences visées        Configurer un protocole de redondance de passerelle par défaut (HSRP, VRRP, GLBP).     Tester la bascule et interpréter les états (active/standby/master/avf).     Comparer les avantages et limites de chaque protocole.         Contexte        Le réseau est découpé par bâtiments avec des VLANs. Chaque bâtiment possède sa paire de routeurs,     et la passerelle virtuelle doit rester disponible même si un équipement tombe.         Support de cours   Document utilisé pour le TP :               Ouvrir le document HSRP / VRRP / GLBP              Topologie Packet Tracer   Extrait des topologies utilisées pour les tests de bascule.                                      Synthèse des protocoles                        Protocole         Standard         Transport         Load Balancing         IPv6         Multicast         Timer Hello                        HSRPRFC 2281UDP/1985❌✅224.0.0.23 s       VRRPRFC 3768IP/112❌❌224.0.0.181 s       GLBPCiscoUDP/3222✅✅224.0.0.1023 s              Exemples de configuration Cisco IOS    HSRP    interface FastEthernet0/0  ip address 10.0.1.2 255.255.255.0  standby 1 ip 10.0.1.1  standby 1 priority 110  standby 1 preempt  standby 1 authentication md5 key-string cisco123       VRRP    interface FastEthernet0/0  ip address 10.0.1.2 255.255.255.0  vrrp 1 ip 10.0.1.1  vrrp 1 priority 110  vrrp 1 preempt  vrrp 1 authentication md5 key-string cisco123       GLBP    interface FastEthernet0/0  ip address 10.0.1.2 255.255.255.0  glbp 1 ip 10.0.1.1  glbp 1 load-balancing round-robin  glbp 1 priority 110  glbp 1 preempt  glbp 1 authentication md5 key-string cisco123         Dépannage    show standby brief show vrrp brief show glbp brief show track      Ces commandes m’ont permis de vérifier l’état des groupes et de comprendre les bascules.      Preuves et captures   Exemples de tests de liaison et d’états d’interfaces pendant la bascule.                 Conclusion        Ce TP m’a permis de comprendre concrètement la redondance de passerelle.     La différence entre HSRP, VRRP et GLBP devient claire quand on observe les états et la bascule.     J’ai surtout retenu l’importance des tests (ping/états) pour valider la continuité de service."
+  }
+  
+]
+
