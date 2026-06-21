@@ -26,19 +26,6 @@ p {
 
 .portfolio-reflection {
   margin-top: 3rem;
-  padding: 1.5rem;
-  border: 1px solid rgba(127, 127, 127, 0.22);
-  border-radius: 1rem;
-  background: rgba(127, 127, 127, 0.08);
-}
-
-.portfolio-reflection h2 {
-  margin-bottom: 0.35rem;
-}
-
-.portfolio-reflection-intro {
-  margin-bottom: 1.25rem;
-  color: var(--text-muted-color);
 }
 
 .portfolio-reflection-grid {
